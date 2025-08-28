@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Plant Haven</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-br from-green-50 to-green-100 min-h-screen font-sans text-gray-800">
+
+    <div class="container mx-auto p-6 lg:p-12">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-extrabold text-green-700 tracking-tight leading-tight drop-shadow-lg">
+                My Plant Haven
+            </h1>
+            <p class="mt-4 text-xl text-green-600 font-light italic">
+                Nurturing nature, one leaf at a time.
+            </p>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Plant List Section -->
+            <section class="lg:col-span-1 bg-white rounded-3xl shadow-xl p-6 border border-green-200">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold text-green-800">My Plants</h2>
+                    <button id="add-plant-btn" class="bg-gradient-to-r from-green-400 to-teal-500 text-white rounded-full p-3 shadow-lg hover:from-green-500 hover:to-teal-600 transition duration-300 transform hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="plant-list" class="space-y-4">
+                    <!-- Plant cards will be injected here by JavaScript -->
+                    <div class="plant-card bg-green-50 border border-green-200 rounded-2xl p-4 flex items-center space-x-4 cursor-pointer hover:shadow-md transition duration-200">
+                        <img src="https://via.placeholder.com/60/9FE2BF/ffffff?text=P" alt="Plant Avatar" class="w-16 h-16 rounded-full object-cover shadow-sm">
+                        <div>
+                            <h3 class="font-semibold text-green-800 text-lg">Loading Plants...</h3>
+                            <p class="text-sm text-green-600">Click to see details</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Plant Details Section -->
+            <section id="plant-details-section" class="lg:col-span-2 bg-white rounded-3xl shadow-xl p-8 border border-green-200 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 id="details-plant-name" class="text-4xl font-extrabold text-green-800 drop-shadow-sm">Select a Plant</h2>
+                    <button id="remove-plant-btn" class="bg-red-400 text-white rounded-full p-2 shadow-lg hover:bg-red-500 transition duration-300 transform hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div class="flex flex-col items-center">
+                        <img id="details-plant-image" src="https://via.placeholder.com/200/9FE2BF/ffffff?text=Plant" alt="Plant Image" class="w-64 h-64 object-cover rounded-full shadow-lg border-4 border-green-100">
+                        <p id="details-plant-species" class="mt-4 text-xl italic text-green-700"></p>
+                    </div>
+                    <div>
+                        <div class="bg-green-50 rounded-xl p-5 mb-6 shadow-sm border border-green-200">
+                            <h3 class="text-xl font-bold text-green-800 mb-3">Care Information</h3>
+                            <p class="text-green-700 leading-relaxed"><strong class="text-green-900">Last Watered:</strong> <span id="details-last-watered"></span></p>
+                            <p class="text-green-700 leading-relaxed"><strong class="text-green-900">Watering Frequency:</strong> <span id="details-watering-frequency"></span> days</p>
+                            <p class="text-green-700 leading-relaxed"><strong class="text-green-900">Light:</strong> <span id="details-light-pref"></span></p>
+                            <p class="text-green-700 leading-relaxed"><strong class="text-green-900">Notes:</strong> <span id="details-notes"></span></p>
+                        </div>
+
+                        <div class="bg-teal-50 rounded-xl p-5 shadow-sm border border-teal-200">
+                            <h3 class="text-xl font-bold text-teal-800 mb-3">Reminders</h3>
+                            <div class="flex items-center space-x-4">
+                                <label for="water-reminder" class="text-teal-700">Next Water:</label>
+                                <input type="date" id="water-reminder" class="p-2 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400">
+                                <button id="set-reminder-btn" class="bg-gradient-to-r from-teal-400 to-blue-400 text-white rounded-full px-4 py-2 shadow-md hover:from-teal-500 hover:to-blue-500 transition duration-300">Set</button>
+                            </div>
+                            <p id="reminder-status" class="mt-3 text-sm text-teal-600 italic"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Add Plant Modal -->
+        <div id="add-plant-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+            <div class="bg-white rounded-3xl p-8 shadow-2xl max-w-lg w-full transform transition-all scale-95 duration-300 border border-green-300">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold text-green-800">Add New Plant</h2>
+                    <button id="close-modal-btn" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <form id="add-plant-form" class="space-y-5">
+                    <div>
+                        <label for="plant-name" class="block text-green-700 text-lg font-medium mb-1">Plant Name</label>
+                        <input type="text" id="plant-name" class="w-full p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" required>
+                    </div>
+                    <div>
+                        <label for="species" class="block text-green-700 text-lg font-medium mb-1">Species (e.g., Monstera Deliciosa)</label>
+                        <input type="text" id="species" class="w-full p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200">
+                    </div>
+                    <div>
+                        <label for="last-watered" class="block text-green-700 text-lg font-medium mb-1">Last Watered Date</label>
+                        <input type="date" id="last-watered" class="w-full p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" required>
+                    </div>
+                    <div>
+                        <label for="watering-frequency" class="block text-green-700 text-lg font-medium mb-1">Watering Frequency (days)</label>
+                        <input type="number" id="watering-frequency" class="w-full p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" min="1" value="7" required>
+                    </div>
+                    <div>
+                        <label for="light-pref" class="block text-green-700 text-lg font-medium mb-1">Light Preference</label>
+                        <select id="light-pref" class="w-full p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200">
+                            <option value="bright-indirect">Bright, Indirect</option>
+                            <option value="direct-sun">Direct Sun</option>
+                            <option value="low-light">Low Light</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="notes" class="block text-green-700 text-lg font-medium mb-1">Notes</label>
+                        <textarea id="notes" rows="3" class="w-full p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200"></textarea>
+                    </div>
+                    <div>
+                        <label for="image-url" class="block text-green-700 text-lg font-medium mb-1">Image URL (Optional)</label>
+                        <input type="url" id="image-url" class="w-full p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200">
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-teal-600 text-white font-bold py-3 rounded-full shadow-lg hover:from-green-600 hover:to-teal-700 transition duration-300 transform hover:scale-105">
+                        Add Plant
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
